@@ -3,8 +3,15 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import PageTitle from '@/components/PageTitle';
 import ContactForm from '@/components/ContactForm';
+import { Card } from '@radix-ui/themes';
+import { 
+  HomeIcon, 
+  ClockIcon, 
+  GlobeIcon, 
+  EnvelopeClosedIcon, 
+  MobileIcon 
+} from '@radix-ui/react-icons';
 
-// Dynamically import the map component with ssr disabled
 const Map = dynamic(
   () => import('@/components/Map'),
   { ssr: false }
@@ -15,28 +22,82 @@ export default function ContactPage() {
     <main className="container mx-auto px-4 py-8">
       <PageTitle>İletişim</PageTitle>
       
-      <div className="grid md:grid-cols-3 gap-8 mb-16">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Adres</h2>
-          <p className="mb-1">Altayçeşme Mah. Çamlı Sk. No:16</p>
-          <p className="mb-1">DAP Royal Center D Blok D86</p>
-          <p className="mb-1">Maltepe/İstanbul</p>
-          <h2 className="text-xl font-semibold mt-8 mb-2">Çalışma Saatleri</h2>
-          <p className="mb-1">Pzt-Cum: 9:00 - 18:00</p>
+      <div className="grid md:grid-cols-2 gap-8 mb-16">
+        {/* Left Column - Address and Working Hours */}
+        <div className="space-y-8">
+          <Card size="3" style={{ padding: '24px' }}>
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center space-x-3 text-blue-600">
+                <HomeIcon className="w-5 h-5" />
+                <h2 className="text-xl font-semibold">Adres</h2>
+              </div>
+              <div className="space-y-2 text-gray-600">
+                <a
+                    className="hover:text-blue-600"
+                    href="https://maps.google.com/?q=40.93612141049471, 29.134720604643068"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <div className="flex flex-col">
+                    <div className="flex items-center">
+                        <GlobeIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mr-2" />
+                        <span>Altayçeşme Mah. Çamlı Sk. No:16</span>
+                    </div>
+                    <span className="ml-6">DAP Royal Center D Blok D86</span>
+                    <span className="ml-6">Maltepe/İstanbul</span>
+                    </div>
+                </a>
+                <div className="flex items-center space-x-2">
+                  <EnvelopeClosedIcon className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <a href="mailto:info@zaparmy.com" className="hover:text-blue-600">info@zaparmy.com</a>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MobileIcon className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <a href="tel:+905555555555" className="hover:text-blue-600">+90 (555) 555-5555</a>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card size="3" style={{ padding: '24px' }}>
+            <div className="flex flex-col space-y-4">
+              <div className="flex items-center space-x-3 text-blue-600">
+                <ClockIcon className="w-5 h-5" />
+                <h2 className="text-xl font-semibold">Çalışma Saatleri</h2>
+              </div>
+              <div className="space-y-2 text-gray-600">
+                <p className="flex justify-between">
+                  <span>Pazartesi - Cuma:</span>
+                  <span>09:00 - 18:00</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Cumartesi:</span>
+                  <span>Kapalı</span>
+                </p>
+                <p className="flex justify-between">
+                  <span>Pazar:</span>
+                  <span>Kapalı</span>
+                </p>
+              </div>
+            </div>
+          </Card>
         </div>
 
-        <div className="h-[400px] col-span-2 w-full rounded-lg overflow-hidden relative z-0">
+        {/* Right Column - Contact Form */}
+        <Card size="3" style={{ padding: '24px' }}>
+          <h2 className="text-xl font-semibold mb-6 text-center">Bize Ulaşın</h2>
+          <p className="text-gray-600 mb-8">
+            Aşağıdaki formu doldurarak bize ulaşabilirsiniz. En kısa sürede size geri dönüş yapacağız.
+          </p>
+          <ContactForm />
+        </Card>
+      </div>
+
+      {/* Full Width Map */}
+      <Card>
+        <div className="h-[400px] w-full">
           <Map />
         </div>
-      </div>
-
-      <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Bize Ulaşın</h2>
-        <p className="text-gray-600 mb-8 text-center">
-          Aşağıdaki formu doldurarak bize ulaşabilirsiniz. En kısa sürede size geri dönüş yapacağız.
-        </p>
-        <ContactForm />
-      </div>
+      </Card>
     </main>
   );
 } 

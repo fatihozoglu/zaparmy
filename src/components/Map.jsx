@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 
 export default function Map() {
-  const position = [40.9361448493572, 29.13474372963872];
+  const position = [40.93612141049471, 29.134720604643068];
 
   useEffect(() => {
     delete L.Icon.Default.prototype._getIconUrl;
