@@ -1,10 +1,24 @@
+'use client';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import * as Dialog from '@radix-ui/react-dialog';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import logo from '@/assets/logo.png';
 
 export default function Header() {
+  const pathname = usePathname();
+
+  const isActive = (path) => pathname === path;
+
+  const navItems = [
+    { path: '/', label: 'Ana Sayfa' },
+    { path: '/about', label: 'Hakkımızda' },
+    { path: '/products', label: 'Ürünler' },
+    { path: '/contact', label: 'İletişim' },
+    { path: '/blog', label: 'Blog' },
+  ];
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
@@ -25,41 +39,25 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <NavigationMenu.List className="hidden md:flex space-x-8">
-                <NavigationMenu.Item>
-                    <NavigationMenu.Link asChild>
-                        <Link href="/" className="text-sm font-medium hover:text-gray-600">
-                            Ana Sayfa
-                        </Link>
-                    </NavigationMenu.Link>
+              {navItems.map((item) => (
+                <NavigationMenu.Item key={item.path}>
+                  <NavigationMenu.Link asChild>
+                    <Link
+                      href={item.path}
+                      className={`text-sm font-medium transition-colors relative ${
+                        isActive(item.path)
+                          ? 'text-blue-600'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      {item.label}
+                      {isActive(item.path) && (
+                        <span className="absolute -bottom-[1.5rem] left-0 right-0 h-0.5 bg-blue-600" />
+                      )}
+                    </Link>
+                  </NavigationMenu.Link>
                 </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link asChild>
-                  <Link href="/about" className="text-sm font-medium hover:text-gray-600">
-                    Hakkımızda
-                  </Link>
-                </NavigationMenu.Link>
-              </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link asChild>
-                  <Link href="/products" className="text-sm font-medium hover:text-gray-600">
-                    Ürünler
-                  </Link>
-                </NavigationMenu.Link>
-              </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link asChild>
-                  <Link href="/contact" className="text-sm font-medium hover:text-gray-600">
-                    İletişim
-                  </Link>
-                </NavigationMenu.Link>
-              </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link asChild>
-                  <Link href="/blog" className="text-sm font-medium hover:text-gray-600">
-                    Blog
-                  </Link>
-                </NavigationMenu.Link>
-              </NavigationMenu.Item>
+              ))}
             </NavigationMenu.List>
 
             {/* Mobile Navigation */}
@@ -85,6 +83,7 @@ export default function Header() {
                 <Dialog.Content className="fixed inset-y-0 right-0 w-[80%] max-w-sm bg-white p-6 shadow-lg">
                   <div className="flex justify-between items-center mb-8">
                     <Dialog.Title className="text-lg font-medium">
+                      Navigation Menu
                     </Dialog.Title>
                     <Dialog.Close className="p-2 hover:bg-gray-100 rounded-md">
                       <svg
@@ -104,21 +103,19 @@ export default function Header() {
                     Main navigation menu for mobile devices
                   </Dialog.Description>
                   <nav className="flex flex-col space-y-4">
-                    <Link href="/" className="text-lg hover:text-gray-600">
-                      Ana Sayfa
-                    </Link>
-                    <Link href="/about" className="text-lg hover:text-gray-600">
-                      Hakkımızda
-                    </Link>
-                    <Link href="/products" className="text-lg hover:text-gray-600">
-                      Ürünler
-                    </Link>
-                    <Link href="/contact" className="text-lg hover:text-gray-600">
-                      İletişim
-                    </Link>
-                    <Link href="/blog" className="text-lg hover:text-gray-600">
-                      Blog
-                    </Link>
+                    {navItems.map((item) => (
+                      <Link
+                        key={item.path}
+                        href={item.path}
+                        className={`text-lg ${
+                          isActive(item.path)
+                            ? 'text-blue-600 font-medium'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
                   </nav>
                 </Dialog.Content>
               </Dialog.Portal>
@@ -126,7 +123,6 @@ export default function Header() {
           </NavigationMenu.Root>
         </div>
       </header>
-      {/* Spacer div to prevent content from hiding behind fixed header */}
       <div className="h-16"></div>
     </>
   );
