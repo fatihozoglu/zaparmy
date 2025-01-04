@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: 'export',
-    distDir: 'dist',
     images: {
         unoptimized: true,
         remotePatterns: [
@@ -11,6 +10,7 @@ const nextConfig = {
             },
         ],
     },
+    basePath: process.env.NODE_ENV === 'production' ? '/zaparmy' : '',
 };
 
 export default nextConfig;
