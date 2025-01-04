@@ -4,10 +4,12 @@ import * as Dialog from '@radix-ui/react-dialog';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import logo from '@/assets/logo.png';
 
 export default function Header() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const isActive = (path) => pathname === path;
 
@@ -61,9 +63,12 @@ export default function Header() {
             </NavigationMenu.List>
 
             {/* Mobile Navigation */}
-            <Dialog.Root>
+            <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
               <Dialog.Trigger asChild>
-                <button className="md:hidden p-2 rounded-md hover:bg-gray-100">
+                <button 
+                  className="md:hidden p-2 rounded-md hover:bg-gray-100"
+                  aria-label="Open menu"
+                >
                   <svg
                     className="h-6 w-6"
                     fill="none"
@@ -80,12 +85,20 @@ export default function Header() {
 
               <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-                <Dialog.Content className="fixed inset-y-0 right-0 w-[80%] max-w-sm bg-white p-6 shadow-lg">
+                <Dialog.Description className="sr-only">
+                  Site navigasyon menüsü
+                </Dialog.Description>
+                <Dialog.Content 
+                  className="fixed inset-y-0 right-0 w-[80%] max-w-sm bg-white p-6 shadow-lg"
+                >
                   <div className="flex justify-between items-center mb-8">
                     <Dialog.Title className="text-lg font-medium">
-                      Navigation Menu
+                      Menü
                     </Dialog.Title>
-                    <Dialog.Close className="p-2 hover:bg-gray-100 rounded-md">
+                    <Dialog.Close 
+                      className="p-2 hover:bg-gray-100 rounded-md"
+                      aria-label="Close menu"
+                    >
                       <svg
                         className="h-6 w-6"
                         fill="none"
@@ -99,14 +112,12 @@ export default function Header() {
                       </svg>
                     </Dialog.Close>
                   </div>
-                  <Dialog.Description className="sr-only">
-                    Main navigation menu for mobile devices
-                  </Dialog.Description>
                   <nav className="flex flex-col space-y-4">
                     {navItems.map((item) => (
                       <Link
                         key={item.path}
                         href={item.path}
+                        onClick={() => setIsOpen(false)}
                         className={`text-lg ${
                           isActive(item.path)
                             ? 'text-blue-600 font-medium'
