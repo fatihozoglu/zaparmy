@@ -1,22 +1,15 @@
 'use client';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import PageTitle from '@/components/PageTitle';
 
+// Dynamically import the map component with ssr disabled
+const Map = dynamic(
+  () => import('@/components/Map'),
+  { ssr: false }
+);
+
 export default function ContactPage() {
-  // This fixes the missing icon issue in Next.js
-  useEffect(() => {
-    delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
-    });
-  }, []);
-
-  const position = [40.9361448493572, 29.13474372963872];
-
   return (
     <main className="container mx-auto px-4 py-8">
       <PageTitle>İletişim</PageTitle>
@@ -32,22 +25,7 @@ export default function ContactPage() {
         </div>
 
         <div className="h-[400px] col-span-2 w-full rounded-lg overflow-hidden relative z-0">
-          <MapContainer 
-            center={position} 
-            zoom={13} 
-            scrollWheelZoom={false}
-            style={{ height: '100%', width: '100%' }}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={position}>
-              <Popup>
-                DAP Royal Center D Blok D86
-              </Popup>
-            </Marker>
-          </MapContainer>
+          <Map />
         </div>
       </div>
     </main>
